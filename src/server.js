@@ -156,7 +156,7 @@ server.post('/entrada', async (req, res) => {
             type
         })
 
-        res.status(200).send(verificationToken)
+        res.status(200).send(statement)
     } catch {
         res.sendStatus(500)
     }
