@@ -1,8 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import joi from 'joi'
 import dotenv from 'dotenv'
+import dayjs from 'dayjs'
 
 dotenv.config();
 
@@ -90,6 +91,44 @@ server.post('/', async (req, res) => {
     await db.collection("online").insertOne({ userId: valid._id })
 
     res.status(200).send(body)
+
+})
+
+// Menu
+server.get('/menu', async (req, res) => {
+
+    const id = ObjectId("62bde16b8a7194f30bc83691")
+
+    const statement = await db.collection("statement").find({
+        id
+    }).toArray()
+
+    res.status(200).send(statement)
+
+})
+
+// Entrada
+server.post('/entrada', async (req, res) => {
+
+    const id = ObjectId("62bde16b8a7194f30bc83691")
+
+    const date = dayjs().format('DD/MM')
+
+    const { price, description, type } = req.body
+
+    try {
+        const statement = await db.collection("statement").insertOne({
+            id,
+            date,
+            description,
+            price,
+            type
+        })
+
+        res.status(200).send(statement)
+    } catch {
+        res.sendStatus(500)
+    }
 
 })
 
