@@ -100,12 +100,14 @@ server.post('/', async (req, res) => {
 
     const token = uuid()
 
+    const myName = valid.name
+
     await db.collection("online").insertOne({
         userId: valid._id,
         token
     })
 
-    res.status(200).send(token)
+    res.status(200).send({ token, myName })
 
 })
 
