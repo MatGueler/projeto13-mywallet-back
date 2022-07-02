@@ -1,5 +1,6 @@
 import joi from 'joi'
 import bcrypt from 'bcrypt'
+import { db } from '../dbMongo/Mongo.js'
 
 export async function registerUser(req, res) {
 

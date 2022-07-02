@@ -1,6 +1,8 @@
 import { v4 as uuid } from 'uuid'
 import joi from 'joi'
 import bcrypt from 'bcrypt'
+import { db } from '../dbMongo/Mongo.js'
+
 
 export async function loginUser(req, res) {
 
