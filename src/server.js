@@ -1,11 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import { MongoClient, ObjectId } from "mongodb";
-import joi from 'joi'
 import dotenv from 'dotenv'
 import dayjs from 'dayjs'
-import bcrypt from 'bcrypt'
-import { v4 as uuid } from 'uuid'
+import { registerUser } from './Controllers/RegisterController.js'
+import { loginUser } from './Controllers/LoginController.js'
 
 dotenv.config();
 
@@ -21,95 +20,10 @@ server.use(express.json());
 server.use(cors());
 
 // Cadastro
-server.post('/cadastro', async (req, res) => {
-
-    const { name, password, email } = req.body;
-
-    const crypsPassword = bcrypt.hashSync(password, 10)
-
-    const userSchema = joi.object({
-        name: joi.string().required(),
-        email: joi.string().required(),
-        password: joi.string().required()
-    });
-
-    const body = {
-        name,
-        email,
-        password
-    }
-
-    const validation = userSchema.validate(body, { abortEarly: true });
-
-    if (validation.error) {
-        console.log(validation.error.details)
-        res.sendStatus(422)
-        return
-    }
-
-    const valid = await db.collection("users").findOne({
-        email
-    })
-    if (valid) {
-        res.sendStatus(409)
-        return
-    }
-
-    await db.collection("users").insertOne({ ...body, password: crypsPassword })
-
-    res.status(200).send(body)
-
-})
+server.post('/cadastro', registerUser)
 
 // Login
-server.post('/', async (req, res) => {
-
-    const { email, password } = req.body;
-
-    const userSchema = joi.object({
-        email: joi.string().required(),
-        password: joi.string().required()
-    });
-
-    const body = {
-        email,
-        password
-    }
-
-    const validation = userSchema.validate(body, { abortEarly: true });
-
-    if (validation.error) {
-        console.log(validation.error.details)
-        res.sendStatus(422)
-        return
-    }
-
-    const valid = await db.collection("users").findOne({
-        email
-    })
-    if (!valid) {
-        res.status(409).send('Usuario não encontrado')
-        return
-    }
-
-    const verifyPassword = bcrypt.compareSync(password, valid.password)
-
-    if (!verifyPassword) {
-        return res.status(401).send('Senha ou email incorretos!')
-    }
-
-    const token = uuid()
-
-    const myName = valid.name
-
-    await db.collection("online").insertOne({
-        userId: valid._id,
-        token
-    })
-
-    res.status(200).send({ token, myName })
-
-})
+server.post('/', loginUser)
 
 // Menu
 server.get('/menu', async (req, res) => {
