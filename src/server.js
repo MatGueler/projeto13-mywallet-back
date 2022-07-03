@@ -6,7 +6,6 @@ import MenuRouter from './Routes/MenuRouter.js'
 import RegisterRouter from './Routes/RegisterRouter.js'
 import TransferRouter from './Routes/TransferRouter.js'
 import validateUser from './Middlewares/ValidateUser.js'
-import { db, objectId } from './dbMongo/Mongo.js'
 
 dotenv.config();
 
@@ -26,4 +25,8 @@ server.use(validateUser, MenuRouter)
 // Entrada e Saída
 server.use(TransferRouter)
 
-server.listen(5000)
+// server.listen(5000)
+
+app.listen(process.env.PORT, () => {
+    console.log("Server running on port " + process.env.PORT);
+});
