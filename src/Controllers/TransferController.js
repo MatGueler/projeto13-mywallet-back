@@ -3,13 +3,7 @@ import dayjs from 'dayjs'
 
 export async function reciveTransfer(req, res) {
 
-    const { authorization } = req.headers
-
-    const token = authorization?.replace('Bearer ', '')
-
-    const verificationToken = await db.collection("online").findOne({
-        token
-    })
+    const verificationToken = res.locals.verificationToken
 
     const id = verificationToken.userId
 
@@ -35,13 +29,7 @@ export async function reciveTransfer(req, res) {
 
 export async function payTransfer(req, res) {
 
-    const { authorization } = req.headers
-
-    const token = authorization?.replace('Bearer ', '')
-
-    const verificationToken = await db.collection("online").findOne({
-        token
-    })
+    const verificationToken = res.locals.verificationToken
 
     const id = verificationToken.userId
 

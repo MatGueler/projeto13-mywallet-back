@@ -5,8 +5,9 @@ import LoginRouter from './Routes/LoginRouter.js'
 import MenuRouter from './Routes/MenuRouter.js'
 import RegisterRouter from './Routes/RegisterRouter.js'
 import TransferRouter from './Routes/TransferRouter.js'
+import validateUser from './Middlewares/ValidateUser.js'
 
-dotenv.config()
+dotenv.config();
 
 const server = express();
 server.use(express.json());
@@ -19,7 +20,7 @@ server.use(RegisterRouter)
 server.use(LoginRouter)
 
 // Menu
-server.use(MenuRouter)
+server.use(validateUser, MenuRouter)
 
 // Entrada e Saída
 server.use(TransferRouter)
