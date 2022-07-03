@@ -14,3 +14,26 @@ export async function menuUser(req, res) {
 
 }
 
+export async function deleteTransfer(req, res) {
+
+    const { transferId } = req.body
+
+    const verificationToken = res.locals.verificationToken
+
+    const id = objectId(verificationToken.userId)
+
+    try {
+        await db.collection('statement').deleteOne({
+            _id: objectId(transferId)
+        })
+
+        const statement = await db.collection('statement').find({
+            id
+        }).toArray()
+
+        res.status(200).send(statement)
+    }
+    catch {
+        res.status(500)
+    }
+}
