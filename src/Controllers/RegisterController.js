@@ -23,7 +23,7 @@ export async function registerUser(req, res) {
     const validation = userSchema.validate(body, { abortEarly: true });
 
     if (validation.error) {
-        console.log(validation.error.details)
+        alert(validation.error.details)
         res.sendStatus(422)
         return
     }
