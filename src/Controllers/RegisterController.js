@@ -38,6 +38,6 @@ export async function registerUser(req, res) {
 
     await db.collection("users").insertOne({ ...body, password: crypsPassword })
 
-    res.status(200).send(body)
+    res.sendStatus(200)
 
 }
